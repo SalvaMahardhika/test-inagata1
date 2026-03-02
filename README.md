@@ -32,7 +32,7 @@ Project ini dibuat untuk memenuhi technical test magang (Backend Developer).
 1. Clone repository
 
 ```bash
-git clone https://github.com/username/invapi.git
+git clone https://github.com/SalvaMahardhika/invapi.git
 cd invapi
 ```
 
