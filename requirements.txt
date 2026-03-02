@@ -1,0 +1,13 @@
+PHP >= 8.2
+Laravel Framework 11
+
+# Dependencies
+tymon/jwt-auth
+darkaonline/l5-swagger (optional)
+
+# Database
+MySQL
+
+# Tools
+Composer
+Postman
