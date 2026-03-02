@@ -6,21 +6,34 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\InventoryController;
 use App\Http\Controllers\Api\AuthController;
 
-/*login/regist*/
+/*tidak perlu login*/
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('products/search', [ProductController::class, 'search']);
 
-/*harus login/punya akses*/
+
+/*Harus login*/
 
 Route::middleware('auth:api')->group(function () {
 
-    Route::get('products/search', [ProductController::class, 'search']);
-    Route::post('products/update-stock', [ProductController::class, 'updateStock']);
-
-    Route::apiResource('products', ProductController::class)->except(['create','edit']);
-
-    Route::apiResource('categories', CategoryController::class)->only(['index','store']);
-
+    //Bisa diakses semua user login
+    Route::get('products', [ProductController::class, 'index']);
+    Route::get('products/{product}', [ProductController::class, 'show']);
+    Route::get('categories', [CategoryController::class, 'index']);
     Route::get('inventory/value', [InventoryController::class, 'totalValue']);
+
+
+    //ADMIN ONLY
+    Route::middleware('admin')->group(function () {
+
+        // Products
+        Route::post('products', [ProductController::class, 'store']);
+        Route::put('products/{product}', [ProductController::class, 'update']);
+        Route::delete('products/{product}', [ProductController::class, 'destroy']);
+        Route::post('products/update-stock', [ProductController::class, 'updateStock']);
+
+        // Categories
+        Route::post('categories', [CategoryController::class, 'store']);
+    });
 });
