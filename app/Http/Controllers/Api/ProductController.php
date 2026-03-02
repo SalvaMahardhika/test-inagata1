@@ -13,9 +13,21 @@ class ProductController extends Controller
     // GET /products
     public function index()
     {
-        $products = Product::with('category')->get();
+    $products = Product::with('category')->get();
 
-        return response()->json($products, 200);
+    $result = $products->map(function ($product) {
+    $finalPrice = $product->price - ($product->price * $product->discount / 100);
+
+        return [
+            'name' => $product->name,
+            'price' => $product->price,
+            'discount' => $product->discount,
+            'final_price' => $finalPrice,
+            'category' => $product->category->name
+        ];
+    });
+
+    return response()->json($result, 200);
     }
 
     // POST /products
@@ -29,9 +41,18 @@ class ProductController extends Controller
     // GET /products/{id}
     public function show(string $id)
     {
-        $product = Product::with('category')->findOrFail($id);
+    $product = Product::with('category')->findOrFail($id);
 
-        return response()->json($product, 200);
+    return response()->json([
+        'id' => $product->id,
+        'name' => $product->name,
+        'price' => $product->price,
+        'stock_quantity' => $product->stock_quantity,
+        'discount' => $product->discount,
+        'category' => $product->category->name,
+        'created_at' => $product->created_at,
+        'updated_at' => $product->updated_at,
+    ], 200);
     }
 
     // PUT /products/{id}
@@ -57,19 +78,37 @@ class ProductController extends Controller
     // GET /products/search
     public function search(Request $request)
     {
-        $query = Product::query();
+    $query = Product::with('category');
 
-        if ($request->name) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
+    //filter by id
+    if ($request->id) {
+        $query->where('id', $request->id);
+    }
 
-        if ($request->category_id) {
-            $query->where('category_id', $request->category_id);
-        }
+    // filter by name
+    if ($request->name) {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
 
-        $products = $query->with('category')->get();
+    // filter by category
+    if ($request->category_id) {
+        $query->where('category_id', $request->category_id);
+    }
 
-        return response()->json($products, 200);
+    $products = $query->get();
+
+    // format output
+    $result = $products->map(function ($product) {
+        return [
+            'name' => $product->name,
+            'price' => $product->price,
+            'discount' => $product->discount,
+            'final_price' => $product->final_price,
+            'category' => $product->category->name
+        ];
+    });
+
+    return response()->json($result);
     }
 
     // POST /products/update-stock
