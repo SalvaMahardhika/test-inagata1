@@ -1,4 +1,4 @@
-# 🚀 Inventory API (Laravel 11)
+#Inventory API (Laravel 11)
 
 RESTful API untuk manajemen inventory produk berbasis Laravel 11.
 Project ini dibuat untuk memenuhi technical test magang (Backend Developer).
@@ -32,7 +32,7 @@ Project ini dibuat untuk memenuhi technical test magang (Backend Developer).
 1. Clone repository
 
 ```bash
-git clone https://github.com/SalvaMahardhika/tes-inagata1
+git clone https://github.com/SalvaMahardhika/test-inagata1.git
 cd invapi
 ```
 
