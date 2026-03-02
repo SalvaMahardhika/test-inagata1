@@ -13,11 +13,20 @@ class Product extends Model
         'name',
         'price',
         'stock_quantity',
-        'category_id'
+        'category_id',
+        'discount'
     ];
+
+        protected $appends = ['final_price'];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function getFinalPriceAttribute()
+    {
+        $discountAmount = ($this->price * $this->discount) / 100;
+        return $this->price - $discountAmount;
     }
 }

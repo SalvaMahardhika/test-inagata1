@@ -87,4 +87,44 @@ class ProductController extends Controller
 
         return response()->json($product, 200);
     }
+
+    //set diskon
+    public function setDiscount(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'discount' => 'required|integer|min:0|max:100'
+        ]);
+
+        $product = Product::findOrFail($request->product_id);
+
+        $product->update([
+            'discount' => $request->discount
+        ]);
+
+        return response()->json([
+            'message' => 'Diskon berhasil diterapkan',
+            'data' => $product
+        ], 200);
+    }
+
+    //remove diskon
+    public function removeDiscount(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id'
+        ]);
+
+        $product = Product::findOrFail($request->product_id);
+
+        $product->update([
+            'discount' => 0
+        ]);
+
+        return response()->json([
+            'message' => 'Diskon dihapus',
+            'data' => $product
+        ], 200);
+    }
+
 }
