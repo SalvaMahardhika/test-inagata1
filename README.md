@@ -2,6 +2,7 @@
 
 RESTful API untuk manajemen inventory produk berbasis Laravel 11.
 Project ini dibuat untuk memenuhi technical test magang inagata (Backend Developer).
+link video: https://youtu.be/Jo5pVWtZJTw
 
 ---
 
